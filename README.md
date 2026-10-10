@@ -110,4 +110,4 @@ Project names must be lowercase letters, numbers and underscores, and must start
 - Press the up arrow in the terminal to bring back your last command.
 - Type the first few letters of a name and press Tab to complete it.
 - Read error messages from the bottom up. The last line usually says what went wrong.
-- Stuck? Run `helpme`, re-read your lab sheet, then ask your instructor or teaching assistant.
+- Stuck? Run `help`, re-read your lab sheet, or ask your teacher.
