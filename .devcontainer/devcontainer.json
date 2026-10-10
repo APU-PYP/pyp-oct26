@@ -33,6 +33,7 @@
         "window.commandCenter": false,
         "workbench.layoutControl.enabled": false,
         "workbench.startupEditor": "none",
+        "window.density.layout": "compact",
 
         // Hide infrastructure from the Explorer, search and Quick Open.
         "files.exclude": {
