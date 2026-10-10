@@ -14,7 +14,7 @@ Each lab exercise lives in its own **project folder**. A project folder holds yo
 
 ## Your first steps
 
-1. Open the terminal. Type `helpme` and press Enter to see every command available. Press Enter again to go back.
+1. Open the terminal. Type `help` and press Enter to see every command available. Press Enter again to go back.
 2. Find the exact project name on your lab sheet.
 3. Create the project, then move into it:
 

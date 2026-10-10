@@ -11,6 +11,9 @@
   
   // Installs pytest and black, and puts the lab commands on PATH.
   "postCreateCommand": "bash .devcontainer/setup.sh",
+
+  // Removes the repository history every time the container starts.
+  "postStartCommand": "rm -rf \"${containerWorkspaceFolder}/.git\"",
   "customizations": {
     "vscode": {
       "extensions": [
@@ -22,7 +25,7 @@
         
         // Error Lens shows problems inline; students can turn it off with the
         // "Error Lens: Toggle" command in the Command Palette.
-        "errorLens.enabled": true,
+        "errorLens.enabled": false,
         "workbench.colorTheme": "Light 2026",
         
         // Remove the status bar, command centre and layout controls.

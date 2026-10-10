@@ -3,8 +3,8 @@
 source "$(dirname "$(readlink -f "$0")")/_lib.sh"
 
 if [ $# -ne 1 ]; then
-  echo "Usage: create NAME"
-  echo "Example: create greeting"
+  echo "Usage   : create <project_name>"
+  echo "Example : create hello"
   exit 2
 fi
 name="$1"
@@ -16,16 +16,15 @@ name = sys.argv[1]
 if not re.fullmatch(r"[a-z][a-z0-9_]*", name):
     print("Use lowercase letters, numbers and underscores, starting with a letter.")
 elif keyword.iskeyword(name) or keyword.issoftkeyword(name):
-    print(f"'{name}' is a Python keyword.")
+    print(f"is a Python keyword.")
 elif name in dir(builtins):
-    print(f"'{name}' is already a built-in Python name, like print or input.")
-elif name.startswith("test") or name in ("main", "src", "tests"):
-    print(f"'{name}' is reserved here.")
+    print(f"is a built-in Python name.")
+elif name.startswith("test") or name in ("main", "src", "tests", "sys"):
+    print(f"is reserved.")
 EOF
 )"
 if [ -n "$problem" ]; then
-  echo "Cannot use '$name' as a project name. $problem"
-  echo "Example: create rectangle_area"
+  echo "Cannot be used as a project name: '$name' $problem"
   exit 2
 fi
 
@@ -39,13 +38,13 @@ case "$here/" in
 esac
 
 if project="$(find_project)"; then
-  echo "You are inside the project '$(basename "$project")'. Move out of it first, for example:"
+  echo "You are currently in '$(basename "$project")'. Move out of it first, for example:"
   echo "  cd $(realpath --relative-to="$here" "$(dirname "$project")")"
   exit 2
 fi
 
 if [ -e "$name" ]; then
-  echo "Something named '$name' already exists here."
+  echo "A directory '$name' already exists."
   exit 2
 fi
 
@@ -53,12 +52,11 @@ mkdir -p "$name/src" "$name/tests"
 
 cat > "$name/src/$name.py" <<EOF
 def $name():
-    """Describe what $name does."""
     pass
 
 
 def main():
-    print($name())
+    $name()
 
 
 if __name__ == "__main__":
@@ -70,17 +68,8 @@ from src.$name import $name
 
 
 def test_$name():
-    # Replace None with the value $name() should return.
     assert $name() is None
 EOF
-
-echo "Created $name"
-echo "  $name/src/$name.py"
-echo "  $name/tests/test_$name.py"
-echo
-echo "Next:"
-echo "  cd $name"
-echo "  check"
 
 # Open the source file in the editor when running inside VS Code.
 if command -v code >/dev/null 2>&1; then

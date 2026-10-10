@@ -1,24 +1,27 @@
 #!/usr/bin/env bash
-# check [FILE]: run the tests of the project you are in.
+# check <project_name>: run the tests of a project.
 #
-#   check            every test file in this project's tests folder
-#   check greeting   only tests/test_greeting.py (also accepts the full file name or path)
+#   check greeting   run every test file in the greeting project's tests folder
+#   check            run the tests of the project you are currently in
 source "$(dirname "$(readlink -f "$0")")/_lib.sh"
 
-if ! project="$(find_project)"; then
-  echo "check runs inside a project folder. Go into one with cd, or make one with:  create NAME"
+if [ $# -gt 0 ]; then
+  name="$1"
+  if [ -d "$name/src" ] && [ -d "$name/tests" ]; then
+    project="$(cd "$name" && pwd -P)"
+  elif [ -d "$REPO_ROOT/$name/src" ] && [ -d "$REPO_ROOT/$name/tests" ]; then
+    project="$REPO_ROOT/$name"
+  else
+    echo "The project '$name' does not exist: create it first with \`create $name\`"
+    exit 2
+  fi
+elif ! project="$(find_project)"; then
+  echo "Usage   : check <project_name>"
+  echo "Example : check greeting"
   exit 2
 fi
 
 target="tests"
-if [ $# -gt 0 ]; then
-  if ! target="$(resolve_test_file "$1" "$project")"; then
-    echo "No test file matching '$1' in $(basename "$project")/tests. Test files here:"
-    (cd "$project/tests" && ls -1 *.py 2>/dev/null | sed 's/^/  /')
-    exit 2
-  fi
-fi
-
 cd "$project" || exit 1
 
 exec python -m pytest -c "$LAB_DIR/pytest.ini" --rootdir="$project" --color=yes "$target"
