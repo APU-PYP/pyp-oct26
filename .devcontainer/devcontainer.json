@@ -1,0 +1,47 @@
+// Student lab environment for GitHub Codespaces
+// This folder is hidden from students by "files.exclude" below
+{
+  "name": "Python Lab",
+  "image": "mcr.microsoft.com/devcontainers/python:3.14",
+
+  // pip --user installs tools such as black into ~/.local/bin.
+  "remoteEnv": {
+    "PATH": "${containerEnv:PATH}:/home/vscode/.local/bin"
+  },
+  
+  // Installs pytest and black, and puts the lab commands on PATH.
+  "postCreateCommand": "bash .devcontainer/setup.sh",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ms-python.python",
+        "usernamehw.errorlens"
+      ],
+      "settings": {
+        "python.analysis.typeCheckingMode": "basic",
+        
+        // Error Lens shows problems inline; students can turn it off with the
+        // "Error Lens: Toggle" command in the Command Palette.
+        "errorLens.enabled": true,
+        "workbench.colorTheme": "Light 2026",
+        
+        // Remove the status bar, command centre and layout controls.
+        "workbench.statusBar.visible": false,
+        "window.commandCenter": false,
+        "workbench.layoutControl.enabled": false,
+        "workbench.startupEditor": "none",
+
+        // Hide infrastructure from the Explorer, search and Quick Open.
+        "files.exclude": {
+          "**/.git": true,
+          "**/.devcontainer": true,
+          "**/.github": true,
+          "**/.vscode": true,
+          "**/.gitignore": true,
+          "**/__pycache__": true,
+          "**/.pytest_cache": true
+        }
+      }
+    }
+  }
+}

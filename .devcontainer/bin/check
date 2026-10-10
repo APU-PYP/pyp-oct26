@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+# check [FILE]: run the tests of the project you are in.
+#
+#   check            every test file in this project's tests folder
+#   check greeting   only tests/test_greeting.py (also accepts the full file name or path)
+source "$(dirname "$(readlink -f "$0")")/_lib.sh"
+
+if ! project="$(find_project)"; then
+  echo "check runs inside a project folder. Go into one with cd, or make one with:  create NAME"
+  exit 2
+fi
+
+target="tests"
+if [ $# -gt 0 ]; then
+  if ! target="$(resolve_test_file "$1" "$project")"; then
+    echo "No test file matching '$1' in $(basename "$project")/tests. Test files here:"
+    (cd "$project/tests" && ls -1 *.py 2>/dev/null | sed 's/^/  /')
+    exit 2
+  fi
+fi
+
+cd "$project" || exit 1
+
+exec python -m pytest -c "$LAB_DIR/pytest.ini" --rootdir="$project" --color=yes "$target"

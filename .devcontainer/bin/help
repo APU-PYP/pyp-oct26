@@ -1,0 +1,45 @@
+#!/usr/bin/env bash
+# helpme: list the commands available in this environment.
+
+clear
+
+cat <<'EOF'
+Course commands
+  create     create src and tests folders
+  check      tests against user-written test cases
+  helpme     show this list
+
+Other commands
+  code       open a file in the editor
+  python     run a Python file
+  black      format your code
+  cd         change folder
+  ls         list files and folders
+  pwd        show the current folder
+  mkdir      make a folder
+  touch      make an empty file
+  cat        print a file
+  cp         copy a file
+  mv         move or rename a file
+  rm         delete a file
+  clear      clear the terminal
+
+Examples
+
+  Common flow
+    $ create greeting          make greeting/src/greeting.py and greeting/tests/test_greeting.py
+    $ cd greeting              go into the project
+    $ python src/greeting.py   run your program
+
+  Testing
+    $ check                    run all tests in this project
+    $ check greeting           run only tests/test_greeting.py
+
+  Formatting
+    $ black src                format the files in src
+    $ black src/greeting.py    format only src/greeting.py
+EOF
+
+echo
+read -r -p "Press 'enter' to return..."
+clear

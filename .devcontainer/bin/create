@@ -1,0 +1,88 @@
+#!/usr/bin/env bash
+# create NAME: make a project folder NAME/ with src/NAME.py and tests/test_NAME.py.
+source "$(dirname "$(readlink -f "$0")")/_lib.sh"
+
+if [ $# -ne 1 ]; then
+  echo "Usage: create NAME"
+  echo "Example: create greeting"
+  exit 2
+fi
+name="$1"
+
+# The name becomes a module, a function and a folder, so it must be a plain Python name.
+problem="$(python3 - "$name" <<'EOF'
+import builtins, keyword, re, sys
+name = sys.argv[1]
+if not re.fullmatch(r"[a-z][a-z0-9_]*", name):
+    print("Use lowercase letters, numbers and underscores, starting with a letter.")
+elif keyword.iskeyword(name) or keyword.issoftkeyword(name):
+    print(f"'{name}' is a Python keyword.")
+elif name in dir(builtins):
+    print(f"'{name}' is already a built-in Python name, like print or input.")
+elif name.startswith("test") or name in ("main", "src", "tests"):
+    print(f"'{name}' is reserved here.")
+EOF
+)"
+if [ -n "$problem" ]; then
+  echo "Cannot use '$name' as a project name. $problem"
+  echo "Example: create rectangle_area"
+  exit 2
+fi
+
+here="$(pwd -P)"
+case "$here/" in
+  "$REPO_ROOT"/*) ;;
+  *)
+    echo "Create projects inside your repository folder. Go there with:  cd $REPO_ROOT"
+    exit 2
+    ;;
+esac
+
+if project="$(find_project)"; then
+  echo "You are inside the project '$(basename "$project")'. Move out of it first, for example:"
+  echo "  cd $(realpath --relative-to="$here" "$(dirname "$project")")"
+  exit 2
+fi
+
+if [ -e "$name" ]; then
+  echo "Something named '$name' already exists here."
+  exit 2
+fi
+
+mkdir -p "$name/src" "$name/tests"
+
+cat > "$name/src/$name.py" <<EOF
+def $name():
+    """Describe what $name does."""
+    pass
+
+
+def main():
+    print($name())
+
+
+if __name__ == "__main__":
+    main()
+EOF
+
+cat > "$name/tests/test_$name.py" <<EOF
+from src.$name import $name
+
+
+def test_$name():
+    # Replace None with the value $name() should return.
+    assert $name() is None
+EOF
+
+echo "Created $name"
+echo "  $name/src/$name.py"
+echo "  $name/tests/test_$name.py"
+echo
+echo "Next:"
+echo "  cd $name"
+echo "  check"
+
+# Open the source file in the editor when running inside VS Code.
+if command -v code >/dev/null 2>&1; then
+  code "$name/src/$name.py" >/dev/null 2>&1 || true
+fi
