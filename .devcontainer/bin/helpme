@@ -7,7 +7,7 @@ cat <<'EOF'
 Course commands
   create     create src and tests folders
   check      tests against user-written test cases
-  helpme       show this list
+  helpme     show this list
 
 Other commands
   code       open a file in the editor
